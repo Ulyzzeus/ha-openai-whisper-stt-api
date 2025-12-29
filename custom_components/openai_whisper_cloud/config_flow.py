@@ -56,7 +56,6 @@ PROVIDER_SELECTION_SCHEMA = vol.Schema(
     }
 )
 
-
 async def validate_input(data: dict, provider: WhisperProvider):
     """Validate the user input."""
 
@@ -69,6 +68,11 @@ async def validate_input(data: dict, provider: WhisperProvider):
         data[CONF_TEMPERATURE] = DEFAULT_TEMPERATURE
     if data.get(CONF_PROMPT) is None:
         data[CONF_PROMPT] = DEFAULT_PROMPT
+    
+    # Skip validation for Deepgram since it has a different API structure
+    if provider.name == "Deepgram":
+        _LOGGER.debug("Skipping model validation for Deepgram")
+        return
 
     response = await asyncio.to_thread(
         requests.get,
@@ -96,6 +100,8 @@ async def validate_input(data: dict, provider: WhisperProvider):
         raise UnknownError
 
     _LOGGER.debug("User validation successful")
+
+
 
 
 class OptionsFlowHandler(OptionsFlowWithConfigEntry):

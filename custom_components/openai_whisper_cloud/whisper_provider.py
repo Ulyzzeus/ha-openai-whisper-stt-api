@@ -51,5 +51,13 @@ whisper_providers = [
         ],
         0
     ),
+    WhisperProvider(
+        "Deepgram",
+        "https://api.deepgram.com/v1/listen",
+        [
+            WhisperModel("nova-3", SUPPORTED_LANGUAGES),
+        ],
+        0
+    ),
     WhisperProvider("Custom", "", [], 0),
 ]
